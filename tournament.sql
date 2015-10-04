@@ -6,7 +6,10 @@
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
 
+--make sure the datebase is empty and brand new :)
+DROP DATABASE IF EXISTS tournament;
+CREATE DATABASE tournament;
+\c tournament;
 
-Create database tournament;
-create table players (id serial, name text, win integer, maches integer);
-create table matches (id serial, player1 text, player2 text, winner text);
+create table players (id serial PRIMARY KEY, name text, win integer, matches integer);
+create table matches (id serial, player1 integer references players (id), player2 integer references players (id), winner1 boolean);

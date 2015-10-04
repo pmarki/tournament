@@ -85,10 +85,12 @@ def reportMatch(winner, loser):
     """
     DB = connect()
     cur = DB.cursor()
+    #get number of wins and matches for winner and loser
     cur.execute('select win, matches from players where ID = %s;', (winner,))
     win = cur.fetchall();
     cur.execute('select win, matches from players where ID = %s;', (loser,))
     lost = cur.fetchall();
+    #record the outcome of a match
     cur.execute('update players set win = %s, matches = %s  where ID = %s; ', (win[0][0]+1, win[0][1]+1, winner))
     cur.execute('update players set matches = %s  where ID = %s; ',  (lost[0][1]+1,loser))
     DB.commit()
@@ -113,6 +115,9 @@ def swissPairings():
     cur = DB.cursor()
     cur.execute("select id, name from players order by win desc; ")
     sql = cur.fetchall()
+    DB.close()
+    
+    #create pairs of players - add players from odd and even row to a tuple
     n = 0
     output = []
     rowEven = ()
@@ -122,6 +127,6 @@ def swissPairings():
         else:    
             output.append((row + rowEven))
         n += 1
-    DB.close()
+        
     return output
 
